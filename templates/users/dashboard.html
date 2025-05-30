@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+  {% load static %}
+  {% block title %}Dashboard{% endblock %}
+  {% block extra_css %}
+      <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  {% endblock %}
+  {% block content %}
+      <div class="container">
+          <h1 class="text-3xl font-semibold text-gray-800 mb-6">Xush kelibsiz, {{ user.username }}!</h1>
+          <div id="stock-updates" class="alerts hidden"></div>
+          <div class="dashboard-grid">
+              <div class="card">
+                  <img src="{% static 'images/icons/inventory.png' %}" alt="Inventory" class="h-8 mb-2">
+                  <h3>Ombordagi mahsulotlar</h3>
+                  <p id="stock-count" class="text-gray-600">Yuklanmoqda...</p>
+              </div>
+              <div class="card">
+                  <img src="{% static 'images/icons/reports.png' %}" alt="Reports" class="h8 mb-2">
+                  <h3>Hisobotlar</h3>
+                  <p id="report-status" class="text-gray-600">Yuklanmoqda...</p>
+              </div>
+          </div>
+          {% if user.role == 'Admin' or user.role == 'Manager' %}
+              {% if no_data %}
+                  <p class="text-center text-gray-600 mt-6">No reports available.</p>
+              {% else %}
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                      <div class="card">
+                          <h2 class="text-2xl font-semibold text-gray-800 mb-4">Porsiyalar Taqsimoti</h2>
+                          <canvas id="pieChart" class="w-full"></canvas>
+                      </div>
+                      <div class="card">
+                          <h2 class="text-2xl font-semibold text-gray-800 mb-4">Oylik Farq Foizi</h2>
+                          <canvas id="columnChart" class="w-full"></canvas>
+                      </div>
+                  </div>
+              {% endif %}
+          {% endif %}
+      </div>
+  {% endblock %}
+  {% block extra_js %}
+      <script src="{% static 'js/charts.js' %}"></script>
+      <script>
+          initializeCharts({{ pie_chart_data|safe }}, {{ column_chart_data|safe }});
+      </script>
+      <script src="{% static 'js/websocket.js' %}"></script>
+      {% if user.role == 'Admin' or user.role == 'Manager' %}
+          <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+          <script>
+              {% if not no_data %}
+              // Pie Chart
+              const pieCtx = document.getElementById('pieChart').getContext('2d');
+              const pieData = {{ pie_chart_data|safe }};
+              new Chart(pieCtx, {
+                  type: 'pie',
+                  data: {
+                      labels: pieData.labels,
+                      datasets: [{
+                          data: pieData.data,
+                          backgroundColor: ['#2563eb', '#10b981'],
+                          borderColor: '#f9fafb',
+                          borderWidth: 2
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      plugins: {
+                          legend: { position: 'top' },
+                          title: { display: true, text: 'Oxirgi Oy Porsiyalari' }
+                      }
+                  }
+              });
+
+              // Column Chart
+              const columnCtx = document.getElementById('columnChart').getContext('2d');
+              const columnData = {{ column_chart_data|safe }};
+              new Chart(columnCtx, {
+                  type: 'bar',
+                  data: {
+                      labels: columnData.labels,
+                      datasets: [{
+                          label: 'Farq Foizi (%)',
+                          data: columnData.difference_percent,
+                          backgroundColor: '#2563eb',
+                          borderColor: '#1d4ed8',
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      scales: {
+                          y: { beginAtZero: false, title: { display: true, text: 'Farq Foizi (%)' } },
+                          x: { title: { display: true, text: 'Oy' } }
+                      },
+                      plugins: {
+                          legend: { display: false },
+                          title: { display: true, text: 'Oylik Farq Foizi' }
+                      }
+                  }
+              });
+              {% endif %}
+          </script>
+      {% endif %}
+  {% endblock %}

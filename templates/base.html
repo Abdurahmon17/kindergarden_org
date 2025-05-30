@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bog‘cha Tizimi{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col {% block body_class %}{% endblock %}">
+    <header>
+        <nav class="navbar flex items-center justify-between px-6 py-4">
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="h-10">
+                <span class="text-white text-lg font-semibold">Bog‘cha Tizimi</span>
+            </div>
+            <ul class="flex space-x-6">
+                <li><a href="{% url 'dashboard' %}" class="hover:text-blue-200">Dashboard</a></li>
+                {% if user.role == 'Admin' or user.role == 'Manager' %}
+                <li><a href="{% url 'inventory_list' %}" class="hover:text-blue-200">Ombord</a></li>
+                <li><a href="{% url 'meal_list' %}" class="hover:text-blue-200">Ovqatlar</a></li>
+                <li><a href="{% url 'reports:report_dashboard' %}" class="hover:text-blue-200">Hisobotlar</a></li>
+                {% endif %}
+                {% if user.role == 'Admin' %}
+                <li><a href="{% url 'user_list' %}" class="hover:text-blue-200">Foydalanuvchilar</a></li>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'user_logout' %}" class="hover:text-blue-200">Chiqish</a></li>
+                {% else %}
+                <li><a href="{% url 'user_login' %}" class="hover:text-blue-200">Kirish</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main class="flex-grow">
+        {% if messages %}
+            <div class="container mb-4">
+                {% for message in messages %}
+                    <div class="messages {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="bg-gray-100 text-center py-4 mt-8">
+        <p class="text-gray-600">© 2025 Bog‘cha Tizimi</p>
+    </footer>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

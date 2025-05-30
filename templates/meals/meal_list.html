@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Ovqatlar ro‘yxati{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold text-gray-800">Ovqatlar</h1>
+            {% if user.role == 'Admin' or user.role == 'Manager' %}
+                <a href="{% url 'meal_create' %}" class="btn btn-primary flex items-center space-x-2">
+                    <img src="{% static 'images/icons/add.png' %}" alt="Add" class="h-5">
+                    <span>Yangi ovqat</span>
+                </a>
+            {% endif %}
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nomi</th>
+                    <th>Amallar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for meal in meals %}
+                    <tr>
+                        <td><a href="{% url 'meal_detail' meal.pk %}" class="text-blue-600 hover:underline">{{ meal.name }}</a></td>
+                        <td>
+                            {% if user.role == 'Admin' or user.role == 'Manager' %}
+                                <a href="{% url 'meal_edit' meal.pk %}" class="text-blue-600 hover:text-blue-800 mr-2">
+                                    <img src="{% static 'images/icons/edit.png' %}" alt="Edit" class="h-5 inline">
+                                </a>
+                                <a href="{% url 'meal_delete' meal.pk %}" class="text-red-600 hover:text-red-800" onclick="return confirm('Haqiqatdan {{ meal.name }} ovqatini o‘chirmoqchimisiz?')">
+                                    <img src="{% static 'images/icons/delete.png' %}" alt="Delete" class="h-5 inline">
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center py-4 text-gray-500">Ovqatlar topilmadi.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a href="{% url 'distribution_create' %}" class="text-blue-600 hover:underline">Ovqat tarqatish</a>
+        </div>
+    </div>
+{% endblock %}

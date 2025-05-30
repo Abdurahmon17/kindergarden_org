@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hisobotlar ro‘yxati</title>
+</head>
+<body>
+    <h1>Oylik hisobotlar</h1>
+    <ul>
+        {% for report in reports %}
+            <li><a href="{% url 'report_detail' report.pk %}">{{ report.title }} ({{ report.month }})</a></li>
+        {% empty %}
+            <li>Hisobotlar topilmadi.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'meal_list' %}">Ovqatlar</a>
+    <a href="{% url 'inventory_list' %}">Ombor</a>
+    <a href="{% url 'user_profile' %}">Profil</a>
+</body>
+</html>

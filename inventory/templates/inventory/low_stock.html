@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kam qolgan mahsulotlar</title>
+</head>
+<body>
+    <h1>Kam qolgan mahsulotlar</h1>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} ({{ product.quantity_grams }}g, minimal: {{ product.min_quantity }}g)</li>
+        {% empty %}
+            <li>Kam qolgan mahsulotlar yo‘q.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'inventory_list' %}">Orqaga</a>
+</body>
+</html>

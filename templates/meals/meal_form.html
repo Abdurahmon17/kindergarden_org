@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% if meal %}Ovqatni tahrirlash{% else %}Yangi ovqat{% endif %}{% endblock %}
+{% block content %}
+    <div class="card max-w-md mx-auto">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">
+            {% if meal %}Ovqatni tahrirlash{% else %}Yangi ovqat qo‘shish{% endif %}
+        </h1>
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="messages {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nomi</label>
+                <input type="text" id="name" name="name" value="{{ meal.name|default_if_none:'' }}" required class="mt-1">
+            </div>
+            <div class="flex space-x-4">
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+                <a href="{% url 'meal_list' %}" class="btn btn-secondary">Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.name }}</title>
+</head>
+<body>
+    <h1>{{ product.name }}</h1>
+    <p>Miqdor: {{ product.quantity_grams }}g</p>
+    <p>Minimal miqdor: {{ product.min_quantity }}g</p>
+    <a href="{% url 'inventory_list' %}">Orqaga</a>
+</body>
+</html>

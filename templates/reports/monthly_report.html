@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hisobot: {{ report.month }} {{ report.year }}{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold text-gray-800">Hisobot:
+                <p><strong>Oy:</strong> {{ report.report_date|date:"F" }}</p>
+                <p><strong>Yil:</strong> {{ report.report_date|date:"Y" }}</p>
+            </h1>
+            {% if user.role == 'Admin' or user.role == 'Manager' %}
+                <div class="flex space-x-2">
+                    <a href="{% url 'reports:report_edit' report.pk %}" class="btn btn-primary flex items-center space-x-2">
+                        <img src="{% static 'images/icons/edit.png' %}" alt="Edit" class="h-5">
+                        <span>Tahrirlash</span>
+                    </a>
+                    <a href="{% url 'reports:report_delete' report.pk %}" class="btn btn-danger flex items-center space-x-2" onclick="return confirm('Haqiqatdan bu hisobotni o‘chirmoqchimisiz?')">
+                        <img src="{% static 'images/icons/delete.png' %}" alt="Delete" class="h-5">
+                        <span>O‘chirish</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="messages {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="space-y-4">
+            <p><strong>Oy:</strong> {{ report.month }}</p>
+            <p><strong>Yil:</strong> {{ report.year }}</p>
+            <p><strong>Tavsif:</strong> {{ report.description|default:"Tavsif yo‘q" }}</p>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'reports:report_dashboard' %}" class="text-blue-600 hover:underline">Orqaga</a>
+        </div>
+    </div>
+{% endblock %}

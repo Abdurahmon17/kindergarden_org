@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ meal.name }}</title>
+</head>
+<body>
+    <h1>{{ meal.name }}</h1>
+    <p>Tarkibiy qismlar:</p>
+    <ul>
+        {% for ingredient in meal.ingredients.all %}
+            <li>{{ ingredient.product.name }} - {{ ingredient.quantity_grams }}g</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'meal_list' %}">Orqaga</a>
+</body>
+</html>

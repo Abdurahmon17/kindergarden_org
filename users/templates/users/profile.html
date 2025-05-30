@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Foydalanuvchi Profili</title>
+</head>
+<body>
+    <h1>Xush kelibsiz, {{ user.username }}!</h1>
+    <p>Email: {{ user.email }}</p>
+    <a href="{% url 'user_logout' %}">Chiqish</a>
+    <a href="{% url 'meal_list' %}">Ovqatlar ro‘yxati</a>
+</body>
+</html>

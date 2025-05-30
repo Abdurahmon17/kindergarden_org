@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Foydalanuvchilar ro‘yxati{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold text-gray-800">Foydalanuvchilar</h1>
+            {% if user.role == 'Admin' %}
+                <a href="{% url 'user_create' %}" class="btn btn-primary flex items-center space-x-2">
+                    <img src="{% static 'images/icons/add.png' %}" alt="Add" class="h-5">
+                    <span>Yangi foydalanuvchi</span>
+                </a>
+            {% endif %}
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Foydalanuvchi nomi</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Amallar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            {% if request.user.role == 'Admin' %}
+                                <a href="{% url 'user_edit' user.pk %}" class="text-blue-600 hover:text-blue-800 mr-2">
+                                    <img src="{% static 'images/icons/edit.png' %}" alt="Edit" class="h-5 inline">
+                                </a>
+                                <a href="{% url 'user_delete' user.pk %}" class="text-red-600 hover:text-red-800" onclick="return confirm('Haqiqatdan {{ user.username }} foydalanuvchisini o‘chirmoqchimisiz?')">
+                                    <img src="{% static 'images/icons/delete.png' %}" alt="Delete" class="h-5 inline">
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-gray-500">Foydalanuvchilar topilmadi.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

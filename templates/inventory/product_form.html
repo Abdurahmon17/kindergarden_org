@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% if product %}Mahsulotni tahrirlash{% else %}Yangi mahsulot{% endif %}{% endblock %}
+{% block content %}
+    <div class="card max-w-md mx-auto">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">
+            {% if product %}Mahsulotni tahrirlash{% else %}Yangi mahsulot qo‘shish{% endif %}
+        </h1>
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="messages {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nomi</label>
+                <input type="text" id="name" name="name" value="{{ product.name|default_if_none:'' }}" required class="mt-1">
+            </div>
+            <div>
+                <label for="quantity_grams" class="block text-sm font-medium text-gray-700">Miqdor (gramm)</label>
+                <input type="number" id="quantity_grams" name="quantity_grams" step="0.01" value="{{ product.quantity_grams|default_if_none:'' }}" required class="mt-1">
+            </div>
+            <div>
+                <label for="min_quantity" class="block text-sm font-medium text-gray-700">Minimal miqdor (gramm)</label>
+                <input type="number" id="min_quantity" name="min_quantity" step="0.01" value="{{ product.min_quantity|default_if_none:'' }}" required class="mt-1">
+            </div>
+            <div class="flex space-x-4">
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+                <a href="{% url 'inventory_list' %}" class="btn btn-secondary">Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

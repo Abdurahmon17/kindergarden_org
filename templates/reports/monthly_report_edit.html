@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hisobotni Tahrirlash{% endblock %}
+{% block content %}
+    <div class="container mx-auto px-4 py-8 max-w-lg">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Hisobotni Tahrirlash</h1>
+
+            {% if messages %}
+                <div class="mb-6 space-y-2">
+                    {% for message in messages %}
+                        <div class="p-4 rounded-lg text-sm
+                            {% if message.tags == 'success' %}bg-green-100 text-green-800
+                            {% elif message.tags == 'error' %}bg-red-100 text-red-800
+                            {% else %}bg-blue-100 text-blue-800{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Month field -->
+                <div>
+                    <label for="{{ form.month.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Oy*</label>
+                    {{ form.month }}
+                    {% if form.month.errors %}
+                        <p class="text-red-600 text-sm mt-2">{{ form.month.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Prepared portions field -->
+                <div>
+                    <label for="{{ form.prepared_portions.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Tayyorlangan portsiyalar*</label>
+                    {{ form.prepared_portions }}
+                    {% if form.prepared_portions.errors %}
+                        <p class="text-red-600 text-sm mt-2">{{ form.prepared_portions.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Possible portions field -->
+                <div>
+                    <label for="{{ form.possible_portions.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Mumkin bo'lgan portsiyalar*</label>
+                    {{ form.possible_portions }}
+                    {% if form.possible_portions.errors %}
+                        <p class="text-red-600 text-sm mt-2">{{ form.possible_portions.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Warning field -->
+                <div class="flex items-center">
+                    {{ form.warning }}
+                    <label for="{{ form.warning.id_for_label }}" class="ml-2 block text-sm font-medium text-gray-700">Ogohlantirish</label>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                    <button type="submit" name="save"
+                            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition font-medium">
+                        SAQLASH
+                    </button>
+                    <a href="{% url 'reports:report_dashboard' %}"
+                       class="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition font-medium text-center">
+                        BEKOR QILISH
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}x

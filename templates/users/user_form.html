@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% if user %}Foydalanuvchini tahrirlash{% else %}Yangi foydalanuvchi{% endif %}{% endblock %}
+{% block content %}
+    <div class="card max-w-md mx-auto">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">
+            {% if user %}Foydalanuvchini tahrirlash{% else %}Yangi foydalanuvchi qo‘shish{% endif %}
+        </h1>
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="messages {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Foydalanuvchi nomi</label>
+                <input type="text" id="username" name="username" value="{{ user.username|default_if_none:'' }}" required class="mt-1">
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" value="{{ user.email|default_if_none:'' }}" required class="mt-1">
+            </div>
+            <div>
+                <label for="role" class="block text-sm font-medium text-gray-700">Rol</label>
+                <select id="role" name="role" required class="mt-1">
+                    <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>Admin</option>
+                    <option value="Manager" {% if user.role == 'Manager' %}selected{% endif %}>Manager</option>
+                    <option value="Chef" {% if user.role == 'Chef' %}selected{% endif %}>Chef</option>
+                </select>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Parol</label>
+                <input type="password" id="password" name="password" {% if user %}placeholder="Yangi parol (ixtiyoriy)"{% else %}required{% endif %} class="mt-1">
+            </div>
+            <div class="flex space-x-4">
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+                <a href="{% url 'user_list' %}" class="btn btn-secondary">Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

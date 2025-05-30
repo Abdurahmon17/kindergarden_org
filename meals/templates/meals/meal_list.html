@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ovqatlar ro‘yxati</title>
+</head>
+<body>
+    <h1>Ovqatlar</h1>
+    <ul>
+        {% for meal in meals %}
+            <li><a href="{% url 'meal_detail' meal.pk %}">{{ meal.name }}</a></li>
+        {% empty %}
+            <li>Ovqatlar topilmadi.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'user_profile' %}">Profil</a>
+</body>
+</html>

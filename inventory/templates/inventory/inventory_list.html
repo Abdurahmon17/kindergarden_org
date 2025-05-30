@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mahsulotlar ro‘yxati</title>
+</head>
+<body>
+    <h1>Mahsulotlar</h1>
+    <ul>
+        {% for product in products %}
+            <li><a href="{% url 'inventory_detail' product.pk %}">{{ product.name }}</a> ({{ product.quantity_grams }}g)</li>
+        {% empty %}
+            <li>Mahsulotlar topilmadi.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'low_stock_list' %}">Kam qolgan mahsulotlar</a>
+    <a href="{% url 'meal_list' %}">Ovqatlar</a>
+    <a href="{% url 'user_profile' %}">Profil</a>
+</body>
+</html>

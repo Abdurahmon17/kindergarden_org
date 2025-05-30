@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ report.title }}</title>
+</head>
+<body>
+    <h1>{{ report.title }}</h1>
+    <p>Oy: {{ report.month }}</p>
+    <p>Ogohlantirish: {{ report.warning|yesno:"Ha,Yo‘q" }}</p>
+    <p>Tafsilotlar: {{ report.details }}</p>
+    <a href="{% url 'report_list' %}">Orqaga</a>
+</body>
+</html>
