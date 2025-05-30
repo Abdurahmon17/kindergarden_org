@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from celery.schedules import crontab
+import sys
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -213,14 +215,14 @@ LOGGING = {
     },
 }
 
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+if 'test' in sys.argv or 'pytest' in sys.argv:
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://127.0.0.1:6379/1',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
         }
     }
-}
