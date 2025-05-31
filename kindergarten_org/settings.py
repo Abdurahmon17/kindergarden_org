@@ -73,6 +73,7 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # Oddiy sync session middleware
     'django.middleware.common.CommonMiddleware',
@@ -103,7 +104,7 @@ TEMPLATES = [
 LOGIN_URL = 'user_login'  # Matches name='user_login' in users/urls.py
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect after successful login
 LOGOUT_REDIRECT_URL = 'user_login'
-ASGI_APPLICATION = 'kindergarten_org.asgi.application'
+# ASGI_APPLICATION = 'kindergarten_org.asgi.application'
 WSGI_APPLICATION = 'kindergarten_org.wsgi.application'
 
 
@@ -166,6 +167,8 @@ USE_I18N = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -215,14 +218,15 @@ LOGGING = {
     },
 }
 
-if 'test' in sys.argv or 'pytest' in sys.argv:
-    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-    CACHES = {
-        'default': {
-            'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': 'redis://127.0.0.1:6379/1',
-            'OPTIONS': {
-                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            }
+# if 'test' in sys.argv or 'pytest' in sys.argv:
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",  # <-- 127.0.0.1 emas, 'redis' bo'lishi kerak
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+}

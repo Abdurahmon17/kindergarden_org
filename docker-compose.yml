@@ -1,0 +1,49 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    command: gunicorn kindergarten_org.wsgi:application --bind 0.0.0.0:8000 --no-sendfile
+    volumes:
+      - .:/app
+      - ./db.sqlite3:/app/db.sqlite3
+      - ./staticfiles:/app/staticfiles
+    ports:
+      - "8000:8000"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  celery_worker:
+    build: .
+    command: celery -A kindergarten_org worker --pool=eventlet --loglevel=info
+    volumes:
+      - .:/app
+      - ./db.sqlite3:/app/db.sqlite3
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - web
+
+  celery_beat:
+    build: .
+    command: celery -A kindergarten_org beat --loglevel=info
+    volumes:
+      - .:/app
+      - ./db.sqlite3:/app/db.sqlite3
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - web
+
+volumes:
+  redis_data:
