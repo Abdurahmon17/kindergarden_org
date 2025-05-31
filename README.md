@@ -1,11 +1,6 @@
-Mana siz so‘ragan professional va to‘liq `README.md` faylining chiroyli va markdown formatida yozilgan varianti:
-
----
-
-````markdown
 # 🎓 kindergarten_org
 
-**`kindergarten_org`** — bu Django asosidagi bolalar bog'chasi boshqaruv tizimi bo‘lib, inventarizatsiya, ovqatlanish, foydalanuvchi va hisobot modullarini o‘z ichiga oladi. Loyihada asinxron ishlarni bajarish uchun **Celery** va **Redis** ishlatilgan.
+**`kindergarten_org`** — bu Django asosidagi bolalar bog'chasi boshqaruv tizimi bo‘lib, inventarizatsiya, ovqatlanish, foydalanuvchilar va hisobot modullarini o‘z ichiga oladi. Asinxron jarayonlar uchun **Celery** va **Redis**, konteynerlash uchun esa **Docker** texnologiyalaridan foydalanilgan.
 
 ---
 
@@ -13,81 +8,67 @@ Mana siz so‘ragan professional va to‘liq `README.md` faylining chiroyli va m
 
 - Python 3.10+
 - Django 4.x
-- Redis-server
+- Redis
 - Celery
 - Eventlet
 - Docker (ixtiyoriy)
 
 ---
 
-## 🚀 Loyihani ishga tushirish
+## 🚀 Ishga tushirish usullari
 
-### 1. Redis-serverni ishga tushirish
+### 🖥 1. Mahalliy ishga tushirish (Local Run)
 
-Agar sizda Redis o‘rnatilgan bo‘lsa, quyidagi buyruq orqali uni ishga tushiring:
+#### 1.1. Redis serverni ishga tushiring (Admin CMD orqali)
 
 ```bash
 redis-server
-````
-
-> ℹ️ Bu Celery uchun **broker** sifatida ishlaydi.
-
----
-
-### 2. Celery Beat va Worker ishga tushirish
-
-Ikkita terminal oynasida quyidagi buyruqlarni bajaring:
-
-#### ➤ Beat:
-
-```bash
-celery -A kindergarten_org beat --loglevel=info
 ```
 
-#### ➤ Worker:
+> ℹ️ Redis — Celery uchun broker vazifasini bajaradi.
+
+#### 1.2. Celery Beat va Worker’ni alohida terminallarda ishga tushiring
 
 ```bash
+# Beat (davriy vazifalar uchun)
+celery -A kindergarten_org beat --loglevel=info
+
+# Worker (fon vazifalar uchun)
 celery -A kindergarten_org worker --pool=eventlet --loglevel=info
 ```
 
----
-
-### 3. Django serverini ishga tushirish
-
-Uchinchi terminalda:
+#### 1.3. Django serverni ishga tushiring
 
 ```bash
 python manage.py runserver
 ```
 
----
+#### 1.4. Web ilovaga kirish
 
-### 4. Brauzerda ochish
-
-Brauzeringizda quyidagi manzilga kiring:
-
-```
-http://127.0.0.1:8000
-```
+Brauzeringizda oching: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
 
-## ⚙️ Docker orqali ishga tushirish (ixtiyoriy)
+### 🐳 2. Docker orqali ishga tushirish
+
+Agar siz Docker’dan foydalanmoqchi bo‘lsangiz:
 
 ```bash
 docker-compose build
 docker-compose up
 ```
 
+> `docker-compose.yml` va `Dockerfile` fayllari to‘g‘ri sozlangan bo‘lishi kerak.
+
 ---
 
-## 🔧 Loyihaning asosiy imkoniyatlari
+## 🔧 Asosiy funksiyalar
 
-* ✅ Inventarizatsiyani boshqarish
-* ✅ Ovqatlanish rejalari va kuzatuvi
-* ✅ Har oy uchun PDF hisobotlar
-* ✅ Foydalanuvchilar va rollarni boshqarish
-* ✅ Asinxron vazifalar uchun Celery integratsiyasi
+- ✅ Inventarizatsiya boshqaruvi
+- ✅ Ovqatlanish rejasi va statistikasi
+- ✅ Foydalanuvchilar va rollarni boshqarish
+- ✅ Oy yakunlari bo‘yicha PDF hisobotlar
+- ✅ Celery yordamida fon vazifalar
 
 ---
 
@@ -98,7 +79,7 @@ kindergarten_org/
 ├── app/
 ├── custom_celery_beat/
 ├── inventory/
-├── kindergarten_org/       # Django settings
+├── kindergarten_org/       # Django konfiguratsiyasi
 ├── logs/
 ├── meals/
 ├── media/
@@ -106,25 +87,25 @@ kindergarten_org/
 ├── static/
 ├── staticfiles/
 ├── templates/
-├── tests/
 ├── users/
 ├── db.sqlite3
+├── manage.py
 ├── requirements.txt
 ├── docker-compose.yml
 ├── Dockerfile
-├── entrypoint.sh
-└── manage.py
+└── entrypoint.sh
 ```
+
+---
+
+## 👨‍💻 Muallif
+
+Abdurahmon17  
+🔗 [GitHub profilingiz](https://github.com/Abdurahmon17)
 
 ---
 
 ## 📜 Litsenziya
 
-Bu loyiha ochiq manbali va istalgan maqsadda foydalanish uchun mo‘ljallangan.
+Bu loyiha ochiq manbali bo‘lib, istalgan maqsadlarda foydalanish uchun ruxsat beriladi.
 
-```
-
----
-
-Agar logotip, badge yoki havolalar kerak bo‘lsa, ular ham qo‘shib beraman. Yana nima kerak bo‘lsa, bemalol so‘rashingiz mumkin.
-```
